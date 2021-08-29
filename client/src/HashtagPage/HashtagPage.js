@@ -20,7 +20,7 @@ class HashtagPage extends Component {
         })
       );
     }
-    document.title = "Hashtag Page | Facehook";
+    document.title = "Hashtag Page | social-network";
   };
 
   fetchData = () => {

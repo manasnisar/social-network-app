@@ -122,8 +122,7 @@ exports.createPost = (req, res, next) => {
     locationName: Joi.string()
       .allow("")
       .required(),
-    photo: Joi.string().required(),
-    private: Joi.boolean().required(),
+    photo: Joi.string().required()
   });
 
   const { error, value } = schema.validate(validateObject);

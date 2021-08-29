@@ -22,7 +22,7 @@ class LocationPage extends Component {
         })
       );
     }
-    document.title = "Location Page | Facehook";
+    document.title = "Location Page | social-network";
   };
 
   fetchData = () => {

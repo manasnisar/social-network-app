@@ -115,7 +115,6 @@ exports.getPosts = (req, res) => {
           posts: [
             {
               $match: {
-                private: {$eq: false},
                 author: { $in: req.body.followings },
               },
             },
@@ -147,7 +146,6 @@ exports.getPosts = (req, res) => {
             // Filter out documents without a price e.g., _id: 7
             {
               $match: {
-                private: {$eq: false},
                 author: { $in: req.body.followings },
               },
             },
@@ -166,7 +164,6 @@ exports.getPosts = (req, res) => {
                 $lt: mongoose.Types.ObjectId(req.body.lastId),
               },
               author: { $in: req.body.followings },
-              private: {$eq: false},
             },
           ],
         },
@@ -485,7 +482,6 @@ exports.createPost = (req, res) => {
         address: req.body.locationName,
       },
       tags: JSON.parse(req.body.tags),
-      private: req.body.private
     });
   } else {
     newPost = new Post({
@@ -495,7 +491,6 @@ exports.createPost = (req, res) => {
       hashtags: [...new Set(hashtags)], // remove duplicates
 
       tags: JSON.parse(req.body.tags),
-      private: req.body.private
     });
   }
 

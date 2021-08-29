@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import { Checkbox,Button, Form } from "semantic-ui-react";
+import { Button, Form } from "semantic-ui-react";
 import { postActions } from "../actions/postActions";
 import { base64StringtoFile } from "../reusable/ReusableUtils";
 import TextInput from "react-autocomplete-input";
@@ -28,8 +28,7 @@ class AddPostTextArea extends Component {
     this.state = {
       value: "",
       part: "",
-      suggestions: [],
-      private: false
+      suggestions: []
     };
 
     this.debouncedRequestOptions = debounce(500, this.handleRequestOptions);
@@ -38,10 +37,6 @@ class AddPostTextArea extends Component {
   handleChange = value => {
     this.setState({ value });
   };
-
-  handlePrivateToggle = e => {  
-    this.setState({private : !this.state.private})
-  }
 
   handleSubmit = () => {
     const { dispatch, imgSrcExt, cropImgSrc, location, divs } = this.props;
@@ -52,7 +47,6 @@ class AddPostTextArea extends Component {
     fd.append("photo", myNewCroppedFile, myNewCroppedFile.name);
     fd.append("description", this.state.value);
     fd.append("tags", JSON.stringify(divs));
-    fd.append("private",this.state.private);
     Object.keys(location).forEach(key => fd.append(key, location[key]));
 
     dispatch(postActions.addPost(fd));
@@ -102,11 +96,6 @@ class AddPostTextArea extends Component {
               style={{ minHeight: 100, maxHeight: 100 }}
             />
           </Form.Field>
-          <Checkbox
-          style = {{paddingBottom: "10px", fontSize: "larger"}}
-          label='Private Post'
-          onChange={this.handlePrivateToggle}
-        />
 
           <Button primary fluid size="big">
             Upload

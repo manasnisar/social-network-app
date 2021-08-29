@@ -16,7 +16,6 @@ const Message = mongoose.model("Message");
 const notificationHandler = require("../handlers/notificationHandler");
 const emailHandler = require("../handlers/emailHandler");
 const messageHandler = require("../handlers/messageHandler");
-const { use } = require("chai");
 
 // Check File Type
 function checkFileType(file, cb) {
@@ -139,7 +138,7 @@ exports.activate = (req, res) => {
                 color: white;
             }
         </style>
-        <title>Facehook</title>
+        <title>social-network</title>
     </head>
     
     <body>
@@ -175,7 +174,7 @@ exports.activate = (req, res) => {
                       color: white;
                   }
               </style>
-              <title>Facehook</title>
+              <title>social-network</title>
           </head>
           
           <body>
@@ -205,7 +204,7 @@ exports.activate = (req, res) => {
                       color: white;
                   }
               </style>
-              <title>Facehook</title>
+              <title>social-network</title>
           </head>
           
           <body>
@@ -234,7 +233,7 @@ exports.activate = (req, res) => {
                   color: white;
               }
           </style>
-          <title>Facehook</title>
+          <title>social-network</title>
       </head>
       
       <body>
@@ -302,7 +301,7 @@ exports.addUser = (req, res) => {
       }
       if (user.email === req.body.email) {
         return res.status(409).json({
-          message: "Email already exists",
+          message: "Email exists",
         });
       }
     }
@@ -339,6 +338,7 @@ exports.sendVerificationEmail = (req, res) => {
 };
 
 exports.sendforgotPasswordEmail = (req, res) => {
+  console.log(req.body);
   User.findOne({ email: req.body.email })
     .select("email username")
     .then((user) => {
@@ -444,7 +444,7 @@ exports.updateUser = (req, res) => {
 
         if (email === req.body.email) {
           return res.status(409).json({
-            message: "Email already exists",
+            message: "Email exists",
           });
         }
       } else {
@@ -508,11 +508,12 @@ exports.getUserData = (req, res, next) => {
           email: 1,
           bio: 1,
           profilePicture: 1,
+          followingIds: { $arrayElemAt: ["$followings.following.user", 0] },
           followings: {
-            $size: { $arrayElemAt: ["$followings.following", 0] },
+            $size: { $arrayElemAt: ["$followings.following.user", 0] },
           },
           followers: {
-            $size: { $arrayElemAt: ["$followers.followers", 0] },
+            $size: { $arrayElemAt: ["$followers.followers.user", 0] },
           },
           postLikes: "$postLikes.post",
           commentLikes: "$commentLikes.comment",
@@ -521,7 +522,6 @@ exports.getUserData = (req, res, next) => {
       },
     ];
   } else {
-
     q = [
       { $match: { _id: mongoose.Types.ObjectId(req.userData.userId) } },
       {
@@ -555,19 +555,9 @@ exports.getUserData = (req, res, next) => {
     receiver: mongoose.Types.ObjectId(req.userData.userId),
   }).countDocuments();
 
-
-  let posts = 0;
-  if(req.body.profilePage){
-      posts = Post.find({
-      author: mongoose.Types.ObjectId(req.userData.userId),
-      // private : false,
-    }).countDocuments();
-  }else{
-    posts = Post.find({
+  const posts = Post.find({
     author: mongoose.Types.ObjectId(req.userData.userId),
-    private : false,
   }).countDocuments();
-  }
 
   const messages = Message.find({
     receiver: mongoose.Types.ObjectId(req.userData.userId),
@@ -593,6 +583,7 @@ exports.getUserData = (req, res, next) => {
         messagesCount: values[3],
         allNotifications: values[4],
       };
+
       req.body.user = data;
 
       next();
@@ -782,45 +773,24 @@ exports.getUserProfileData = (req, res, next) => {
           message: "User not found",
         });
       }
-      if(req.body.profilePage){
-        Post.find({
-          author: mongoose.Types.ObjectId(user[0]._id),
+
+      Post.find({
+        author: mongoose.Types.ObjectId(user[0]._id),
+      })
+        .countDocuments()
+        .then((postsCount) => {
+          let data = {
+            ...user[0],
+            postsCount,
+          };
+          req.body.user = data;
+          next();
         })
-          .countDocuments()
-          .then((postsCount) => {
-            let data = {
-              ...user[0],
-              postsCount,
-            };
-            req.body.user = data;
-            next();
-          })
-          .catch((err) => {
-            return res.status(500).json({
-              message: err.message,
-            });
+        .catch((err) => {
+          return res.status(500).json({
+            message: err.message,
           });
-      }else{
-        Post.find({
-          author: mongoose.Types.ObjectId(user[0]._id),
-          private: false,
-        })
-          .countDocuments()
-          .then((postsCount) => {
-            let data = {
-              ...user[0],
-              postsCount,
-            };
-            req.body.user = data;
-            next();
-          })
-          .catch((err) => {
-            return res.status(500).json({
-              message: err.message,
-            });
-          });
-      }
-     
+        });
     })
     .catch((err) => {
       return res.status(500).json({
@@ -839,7 +809,6 @@ exports.getPosts = (req, res) => {
               $lt: mongoose.Types.ObjectId(req.body.lastId),
             },
             author: mongoose.Types.ObjectId(req.body.userId),
-            // private: false,
           },
         ],
       },
@@ -898,76 +867,12 @@ exports.getPosts = (req, res) => {
 };
 
 exports.getUserPosts = (req, res, next) => {
-  if (req.body.profilePage ) {
-    if(req.body.hasOwnProperty('userProfile')){
-      Post.aggregate([
-        {
-          $match: {
-            author: mongoose.Types.ObjectId(req.body.user._id),
-            // private: false,
-           },
-        },
-        { $sort: { createdAt: -1 } }, 
-        { $limit: 10 },
-        {
-          $lookup: {
-            from: "users",
-            localField: "author",
-            foreignField: "_id",
-            as: "author",
-          },
-        },
-        {
-          $lookup: {
-            from: "postlikes",
-            localField: "_id",
-            foreignField: "post",
-            as: "likes",
-          },
-        },
-        {
-          $lookup: {
-            from: "comments",
-            localField: "_id",
-            foreignField: "post",
-            as: "comments",
-          },
-        },
-        {
-          $project: {
-            photo: 1,
-            createdAt: 1,
-            tags: 1,
-            location: 1,
-            likes: {
-              $size: { $arrayElemAt: ["$likes.users_likes", 0] },
-            },
-            comments: {
-              $size: { $ifNull: ["$comments", []] },
-            },
-            description: 1,
-            "author._id": 1,
-            "author.username": 1,
-          },
-        },
-      ])
-        .then((posts) => {
-          req.body.user.posts = posts;
-          next();
-        })
-        .catch((err) => {
-          console.log(err);
-          return res.status(500).json({ message: err.message });
-        });
-    }else{
+  if (req.body.profilePage) {
     Post.aggregate([
       {
-        $match: {
-          author: mongoose.Types.ObjectId(req.body.user._id),
-          private: false,
-         },
+        $match: { author: mongoose.Types.ObjectId(req.body.user._id) },
       },
-      { $sort: { createdAt: -1 } }, 
+      { $sort: { createdAt: -1 } },
       { $limit: 10 },
       {
         $lookup: {
@@ -1019,8 +924,7 @@ exports.getUserPosts = (req, res, next) => {
         console.log(err);
         return res.status(500).json({ message: err.message });
       });
-  } 
-  }else {
+  } else {
     next();
   }
 };
@@ -1072,7 +976,6 @@ exports.getFollowings = (req, res, next) => {
 exports.getUserProfileFollowers = (req, res) => {
   Followers.find({ user: mongoose.Types.ObjectId(req.body.userId) })
     .populate("followers.user", "username profilePicture ")
-    .select("followers.user")
     .then((users) => {
       return res.status(200).json({ users });
     })
@@ -1083,7 +986,6 @@ exports.getUserProfileFollowings = (req, res) => {
   Following.find({ user: mongoose.Types.ObjectId(req.body.userId) })
 
     .populate("following.user", "username profilePicture ")
-    .select("following.user.email")
     .then((users) => {
       return res.status(200).json({ users });
     })

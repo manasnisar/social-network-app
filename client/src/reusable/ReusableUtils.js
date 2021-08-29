@@ -1,3 +1,7 @@
+// A few JavaScript Functions for Images and Files
+// Author: Justin Mitchel
+// Source: https://kirr.co/ndywes
+
 // Convert a Base64-encoded string to a File object
 export function base64StringtoFile(base64String, filename) {
   var arr = base64String.split(","),

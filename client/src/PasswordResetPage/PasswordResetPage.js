@@ -13,7 +13,7 @@ class PasswordResetPage extends Component {
   };
 
   componentDidMount = () => {
-    document.title = "Password reset | Facehook";
+    document.title = "Password reset | social-network";
     this.setState({ jwt: this.props.match.params.jwt });
   };
 

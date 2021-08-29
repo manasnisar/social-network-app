@@ -36,10 +36,6 @@ const postSchema = new mongoose.Schema({
   tags: {
     type: Array,
     default: []
-  },
-  private:{
-    type : Boolean,
-    // default: true
   }
 });
 

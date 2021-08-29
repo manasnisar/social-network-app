@@ -44,7 +44,7 @@ const linkifyOptions = {
 
 class ProfilePage extends Component {
   componentDidMount = () => {
-    document.title = "Profile | Facehook";
+    document.title = "Profile | social-network";
   };
 
   fetchData = () => {
@@ -129,7 +129,6 @@ class ProfilePage extends Component {
         ))
       : "No followers";
 
-
     return (
       <div className="main">
         {user.loadingUser ? (
@@ -156,11 +155,7 @@ class ProfilePage extends Component {
                   </div>
 
                   <div className="profile-user-settings">
-                  <h1 className="profile-user-name">
-                  {user.data.firstName +
-                      " " +
-                      user.data.lastName}
-                  </h1>
+                    <h1 className="profile-user-name">{user.data.username}</h1>
 
                     <Button
                       as={Link}
@@ -170,8 +165,8 @@ class ProfilePage extends Component {
                       icon
                       labelPosition="right"
                     >
-                      New Post
-                      <Icon  name="upload" />
+                      Add post
+                      <Icon name="upload" />
                     </Button>
                     <EditProfileModal>
                       <Button
@@ -180,21 +175,10 @@ class ProfilePage extends Component {
                         icon
                         labelPosition="right"
                       >
-                        Profile Settings
+                        Profile settings
                         <Icon name="setting" />
                       </Button>
                     </EditProfileModal>
-                    <Button
-                      className="profile-edit-btn"
-                      size="large"
-                      icon
-                      labelPosition="right"
-                      onClick={()=>{
-                        window.open('https://mp-memorygame.herokuapp.com/')
-                      }}
-                    >Play Game
-                      <Icon name="upload" />
-                    </Button>
                   </div>
                   <div className="profile-stats">
                     <ul>
@@ -245,10 +229,9 @@ class ProfilePage extends Component {
                     </ul>
                   </div>
                   <div className="profile-bio">
-                  <div className="profile-real-name">
-                  @{user.data.username}
-                  </div>
-                      <br/>
+                    <div className="profile-real-name">
+                      {user.data.firstName + " " + user.data.lastName}
+                    </div>
                     <div className="profile-bio-description">
                       <Linkify options={linkifyOptions}>
                         {user.data.bio}
@@ -258,7 +241,6 @@ class ProfilePage extends Component {
                 </div>
               </div>
             </header>
-            <div class="ui divider"></div>
             <main>
               <div className="container">
                 {user.data.postsCount === 0 ? (

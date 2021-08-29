@@ -27,7 +27,7 @@ class LoginPage extends React.Component {
   }
 
   componentDidMount = () => {
-    document.title = "Login | Facehook";
+    document.title = "Login | social-network";
   };
 
   handleChange(e) {
@@ -83,7 +83,7 @@ class LoginPage extends React.Component {
         <Message
           size="large"
           attached
-          header="Facehook"
+          header="social-network"
           content="Fill out the form below to log-in"
         />
         <Form
@@ -193,6 +193,17 @@ class LoginPage extends React.Component {
           </Form>
         ) : null}
 
+        <Message>
+          <Message.Header>
+            <a
+              href="https://github.com/misa-j/social-network"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Link to a github repo
+            </a>
+          </Message.Header>
+        </Message>
       </div>
     );
   }

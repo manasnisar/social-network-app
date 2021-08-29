@@ -4,7 +4,7 @@
   "license": "ISC",
   "dependencies": {
     "autosuggest-highlight": "^3.1.1",
-    "axios": "^0.21.1",
+    "axios": "^0.18.0",
     "config": "^3.0.1",
     "dayjs": "^1.8.20",
     "deck.gl": "^7.1.10",
@@ -41,14 +41,14 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "winBuild": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "proxy": "http://localhost:5000/",
+  "proxy": "http://127.0.0.1:5000",
   "browserslist": [
     ">0.2%",
     "not dead",

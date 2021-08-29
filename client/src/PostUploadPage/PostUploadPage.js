@@ -3,7 +3,7 @@ import "react-map-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import {  Icon, Button, Message } from "semantic-ui-react";
+import { Icon, Button, Message } from "semantic-ui-react";
 
 import PostForm from "../components/PostForm";
 import { Map } from "../components/Map";
@@ -46,7 +46,7 @@ class PostUploadPage extends Component {
   };
 
   componentDidMount = () => {
-    document.title = "Upload | Facehook";
+    document.title = "Upload | social-network";
   };
 
   handlePreviousClick = () => {

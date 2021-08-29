@@ -1,3 +1,7 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
 
 html,
 body,
@@ -644,9 +648,7 @@ i.icon.outline.heart {
   }
 
   .main-navbar .logo {
-    /* position: absolute; */
-    
-    font-size: large;
+    font-size: x-small;
   }
 
   #icon-container {
@@ -691,10 +693,9 @@ i.icon.outline.heart {
   }
 
   .profile-user-settings {
-    align-items: center;
     display: grid;
     grid-column-gap: 1rem;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 2fr 2fr;
   }
 
   .profile-image {
@@ -1137,12 +1138,11 @@ ul.react-autocomplete-input > li.active {
 /* login signup form */
 
 .form-centered {
-  padding: 10% 20% 10% 20%;
-  /* position: absolute;
+  position: absolute;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); */
+  transform: translate(-50%, -50%);
 }
 /*messenger*/
 /*
@@ -1792,6 +1792,7 @@ body {
 #frame .content .messages ul li.sent img {
   margin: 6px 8px 0 0;
 }
+
 #frame .content .messages ul li.sent p {
   background: #f5f5f5;
   word-wrap: break-word;
@@ -1801,6 +1802,17 @@ body {
   float: right;
   margin: 6px 0 0 8px;
 }
+
+#frame .content .messages ul li.replies div {
+  float: right;
+  margin: 6px 0 0 30px;
+}
+
+#frame .content .messages ul li.sent div {
+  margin: 6px 30px 0 0;
+  float: left;
+}
+
 #frame .content .messages ul li.replies p {
   background: #435f7a;
   color: #f5f5f5;

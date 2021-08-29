@@ -167,9 +167,7 @@ class UserProfile extends Component {
 
                 <div className="profile-user-settings">
                   <h1 className="profile-user-name">
-                  {userProfileData.data.firstName +
-                      " " +
-                      userProfileData.data.lastName}
+                    {userProfileData.data.username}
                   </h1>
 
                   <FollowButton
@@ -228,9 +226,10 @@ class UserProfile extends Component {
 
                 <div className="profile-bio">
                   <div className="profile-real-name">
-                  @{userProfileData.data.username}
+                    {userProfileData.data.firstName +
+                      " " +
+                      userProfileData.data.lastName}
                   </div>
-                  <br/>
                   <div className="profile-bio-description">
                     <Linkify options={linkifyOptions}>
                       {userProfileData.data.bio}
@@ -239,7 +238,6 @@ class UserProfile extends Component {
                 </div>
               </div>
             </div>
-            <div class="ui divider"></div>
           </header>
           <main>
             <div className="container">
@@ -253,7 +251,7 @@ class UserProfile extends Component {
                   dataLength={userProfileData.data.posts.length} //This is important field to render the next data
                   next={this.fetchData}
                   hasMore={hasMore}
-                  // loader={<h4></h4>}
+                  loader={<h4>Loading...</h4>}
                 >
                   {posts}
                 </InfiniteScroll>
