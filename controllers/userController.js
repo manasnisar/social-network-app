@@ -63,6 +63,7 @@ exports.upload = (req, res, next) => {
     if (!req.file) return res.json({ message: "Please upload a file" });
 
     req.body.photo = req.file.filename;
+    console.log("./public/images/profile-picture/100x100/" + req.body.photo)
 
     Jimp.read(req.file.path, function (err, test) {
       if (err) throw err;
