@@ -42,9 +42,9 @@ require("./models/Message");
 const app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://facehook-client.herokuapp.com/'],
+  origin: ['http://localhost:3000', 'https://facehook-client.herokuapp.com'],
 };
-let allowedOrigins = ['http://localhost:3000', 'https://facehook-client.herokuapp.com/']
+let allowedOrigins = ['http://localhost:3000', 'https://facehook-client.herokuapp.com']
 
 app.use(function (req, res, next) {
   let origin = req.headers.origin;
