@@ -30,7 +30,7 @@
     "nodemailer": "^6.6.3",
     "nodemailer-express-handlebars": "^3.1.0",
     "nodemon": "^2.0.12",
-    "socket.io": "^2.4.1",
+    "socket.io": "^2.5.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
